@@ -11,6 +11,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 #include "Kismet/GameplayStatics.h"
+#include "OnlineSubsystem.h"
+#include "Interfaces/OnlineSessionInterface.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -53,6 +55,18 @@ AUE5_MultiplayerTestCharacter::AUE5_MultiplayerTestCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	/* <Code to join the session by Steam> */
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if (OnlineSubsystem)
+	{
+		OnlineSessionInterface = OnlineSubsystem->GetSessionInterface();
+
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.f, FColor::Blue, FString::Printf(TEXT("Found subsystem %s"), *OnlineSubsystem->GetSubsystemName().ToString()));
+		}
+	}
 }
 
 void AUE5_MultiplayerTestCharacter::BeginPlay()
@@ -70,6 +84,7 @@ void AUE5_MultiplayerTestCharacter::BeginPlay()
 	}
 }
 
+/* <Code to join the session by LAN> */
 void AUE5_MultiplayerTestCharacter::OpenLobby()
 {
 	TObjectPtr <UWorld> World = GetWorld();
@@ -92,6 +107,8 @@ void AUE5_MultiplayerTestCharacter::CallClientTravel(const FString& Address)
 		PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 	}
 }
+
+/* </Code to join the session by LAN> */
 
 //////////////////////////////////////////////////////////////////////////
 // Input

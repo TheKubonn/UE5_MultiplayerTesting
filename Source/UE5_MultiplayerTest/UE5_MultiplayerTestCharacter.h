@@ -70,6 +70,7 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	// Code to join the session by LAN
 	UFUNCTION(BlueprintCallable)
 	void OpenLobby();
 
@@ -78,5 +79,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void CallClientTravel(const FString& Address);
+
+	// Code to join the session by Steam
+	TSharedPtr <class IOnlineSession, ESPMode::ThreadSafe> OnlineSessionInterface;
 };
 
